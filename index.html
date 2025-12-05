@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বৈজ্ঞানিক মাছ চাষ ব্যবস্থাপনা: সমন্বিত ক্যালকুলেটর</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #f4f4f4;
+            --border-color: #ddd;
+            --text-color: #333;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: #e9ecef;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        
+        header p {
+            margin: 5px 0 0;
+            font-size: 1em;
+        }
+
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            background: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-button {
+            padding: 12px 15px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            flex-grow: 1;
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-button:hover:not(.active) {
+            background-color: #e2e6ea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 25px;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .form-section, .result-section {
+            background: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+        }
+
+        .calc-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .calc-btn:hover {
+            background-color: #218838;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e2e6ea;
+            border-left: 5px solid var(--primary-color);
+            border-radius: 5px;
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+        }
+
+        .result-box p {
+            margin: 5px 0;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .result-box span {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            grid-column: 1 / -1; /* Span all columns */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>বৈজ্ঞানিক মাছ চাষ ব্যবস্থাপনা ক্যালকুলেটর</h1>
+        <p>মাছ চাষের প্রতিটি ধাপের জন্য একটি সমন্বিত সমাধান</p>
+    </header>
+
+    <div class="tab-nav">
+        <button class="tab-button active" onclick="openTab(event, 'mod1')">মডিউল ১: জায়গা ও পানি</button>
+        <button class="tab-button" onclick="openTab(event, 'mod2')">মডিউল ২: মাছের মজুদ</button>
+        <button class="tab-button" onclick="openTab(event, 'mod3')">মডিউল ৩: বায়োমাস</button>
+        <button class="tab-button" onclick="openTab(event, 'mod4')">মডিউল ৪: খাদ্য</button>
+        <button class="tab-button" onclick="openTab(event, 'mod5')">মডিউল ৫: ঔষধ</button>
+        <button class="tab-button" onclick="openTab(event, 'mod6')">মডিউল ৬: FCR</button>
+        <button class="tab-button" onclick="openTab(event, 'mod7')">মডিউল ৭: মৃত্যুহার</button>
+        <button class="tab-button" onclick="openTab(event, 'mod8')">মডিউল ৮: খরচ</button>
+        <button class="tab-button" onclick="openTab(event, 'mod9')">মডিউল ৯: লাভ-ক্ষতি</button>
+    </div>
+
+    <!-- মডিউল ১: জায়গার পরিমাপ এবং পানির আয়তন -->
+    <div id="mod1" class="tab-content active">
+        <h2>প্রথম অধ্যায়: জায়গার পরিমাপ এবং পানির আয়তন</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m1_unit">পরিমাপের একক</label>
+                    <select id="m1_unit">
+                        <option value="decimal">শতাংশ / ডেসিম্যাল</option>
+                        <option value="katha">কাঠা</option>
+                        <option value="bigha">বিঘা</option>
+                        <option value="acre">একর</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="m1_area_input">জমির পরিমাণ</label>
+                    <input type="number" id="m1_area_input" placeholder="যেমন: ১০">
+                </div>
+                <div class="form-group">
+                    <label for="m1_avg_depth">পুকুরের গড় গভীরতা (ফিট)</label>
+                    <input type="number" id="m1_avg_depth" placeholder="যেমন: ৫">
+                </div>
+                <button class="calc-btn" onclick="calculateModule1()">হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m1_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- মডিউল ২: মাছের মজুদ ঘনত্ব -->
+    <div id="mod2" class="tab-content">
+        <h2>দ্বিতীয় অধ্যায়: মাছের মজুদ ঘনত্ব এবং পোনা ছাড়ার ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m2_pond_area_decimal">পুকুরের জায়গা (শতাংশ)</label>
+                    <input type="number" id="m2_pond_area_decimal" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="m2_culture_system">চাষ পদ্ধতি এবং প্রজাতি</label>
+                    <select id="m2_culture_system">
+                        <option value="semi_intensive_carp">কার্প মিশ্রচাষ (আধা-নিবিড়)</option>
+                        <option value="extensive_carp">কার্প মিশ্রচাষ (বিস্তৃত)</option>
+                        <option value="tilapia_semi">মনোসেক্স তেলাপিয়া (আধা-নিবিড়)</option>
+                        <option value="pangas_cage">পাঙ্গাস (খাঁচায়, নিবিড়)</option>
+                    </select>
+                </div>
+                 <div class="form-group" id="m2_cage_volume_group" style="display:none;">
+                    <label for="m2_cage_volume_m3">খাঁচার আয়তন (ঘনমিটার)</label>
+                    <input type="number" id="m2_cage_volume_m3" placeholder="যেমন: ২০">
+                </div>
+                <button class="calc-btn" onclick="calculateModule2()">পোনা মজুদের হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m2_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                 <div class="info-box">
+                    <strong>দ্রষ্টব্য:</strong> মডিউল ১ থেকে পুকুরের জায়গার পরিমাণ স্বয়ংক্রিয়ভাবে লোড হয়েছে। পাঙ্গাস (খাঁচায়) নির্বাচন করলে পুকুরের জায়গার পরিবর্তে খাঁচার আয়তন (ঘনমিটার) ইনপুট দিন।
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- মডিউল ৩: মাছের ওজন এবং বায়োমাস -->
+    <div id="mod3" class="tab-content">
+        <h2>তৃতীয় অধ্যায়: মাছের ওজন এবং বায়োমাস ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m3_total_fish">পুকুরে মোট মাছের সংখ্যা (আনুমানিক)</label>
+                    <input type="number" id="m3_total_fish" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="m3_avg_weight">মাছের গড় ওজন (গ্রাম)</label>
+                    <input type="number" id="m3_avg_weight" placeholder="নমুনায়ন করে ইনপুট দিন">
+                </div>
+                <button class="calc-btn" onclick="calculateModule3()">বায়োমাস হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m3_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                <div class="info-box">
+                    <strong>গুরুত্বপূর্ণ:</strong> মডিউল ২ থেকে মাছের মোট সংখ্যা লোড হয়েছে। সঠিক বায়োমাস পেতে নমুনায়ন করে মাছের সঠিক গড় ওজন ইনপুট দেওয়া আবশ্যক।
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- মডিউল ৪: মাছের খাদ্য ব্যবস্থাপনা -->
+    <div id="mod4" class="tab-content">
+        <h2>চতুর্থ অধ্যায়: মাছের খাদ্য ব্যবস্থাপনা ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                 <div class="form-group">
+                    <label for="m4_species">মাছের প্রজাতি</label>
+                    <select id="m4_species">
+                        <option value="tilapia">তেলাপিয়া</option>
+                        <option value="pangas">পাঙ্গাস</option>
+                        <option value="carp">কার্প (রুই/কাতলা)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="m4_biomass">মোট বায়োমাস (কেজি)</label>
+                    <input type="number" id="m4_biomass" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="m4_avg_weight">মাছের গড় ওজন (গ্রাম)</label>
+                    <input type="number" id="m4_avg_weight" readonly>
+                </div>
+                <button class="calc-btn" onclick="calculateModule4()">দৈনিক খাদ্য নির্ণয় করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m4_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                 <div class="info-box">
+                    <strong>দ্রষ্টব্য:</strong> মডিউল ৩ থেকে মোট বায়োমাস এবং মাছের গড় ওজন স্বয়ংক্রিয়ভাবে লোড হয়েছে।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- মডিউল ৫: ঔষধ ও রাসায়নিক -->
+    <div id="mod5" class="tab-content">
+        <h2>পঞ্চম অধ্যায়: ঔষধ ও রাসায়নিক ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m5_chemical">রাসায়নিক নির্বাচন করুন</label>
+                    <select id="m5_chemical">
+                        <option value="lime">চুন (পুকুর প্রস্তুতি)</option>
+                        <option value="salt">লবণ (প্রতি শতাংশ)</option>
+                        <option value="kmno4">পটাশিয়াম পারম্যাঙ্গানেট (KMnO4)</option>
+                        <option value="zeolite">জিওলাইট</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label>পুকুরের জায়গা (শতাংশ)</label>
+                    <input type="number" id="m5_pond_area_decimal" readonly>
+                </div>
+                <div class="form-group">
+                    <label>পুকুরে পানির পরিমাণ (লিটার)</label>
+                    <input type="number" id="m5_water_volume_liter" readonly>
+                </div>
+                <button class="calc-btn" onclick="calculateModule5()">প্রয়োজনীয় পরিমাণ হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m5_result" class="result-box">
+                   <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                 <div class="info-box">
+                    <strong>দ্রষ্টব্য:</strong> মডিউল ১ থেকে পুকুরের জায়গা ও পানির পরিমাণ স্বয়ংক্রিয়ভাবে লোড হয়েছে।
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- মডিউল ৬: খাদ্য রূপান্তর হার (FCR) -->
+    <div id="mod6" class="tab-content">
+        <h2>ষষ্ঠ অধ্যায়: খাদ্য রূপান্তর হার (FCR) ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m6_total_feed">মোট ব্যবহৃত খাদ্য (কেজি)</label>
+                    <input type="number" id="m6_total_feed" placeholder="যেমন: ৫০০">
+                </div>
+                <div class="form-group">
+                    <label for="m6_total_weight_gain">মোট ওজন বৃদ্ধি (কেজি)</label>
+                    <input type="number" id="m6_total_weight_gain" placeholder="যেমন: ৩৫০">
+                </div>
+                <button class="calc-btn" onclick="calculateModule6()">FCR হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m6_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                <div class="info-box">
+                    <strong>মোট ওজন বৃদ্ধি</strong> = (মাছ বিক্রির সময় মোট ওজন) - (পোনা ছাড়ার সময় মোট ওজন)।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- মডিউল ৭: মৃত্যুহার -->
+    <div id="mod7" class="tab-content">
+        <h2>সপ্তম অধ্যায়: মৃত্যুহার ও বেঁচে থাকার হার ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m7_initial_stock">পোনা ছাড়ার সময় মোট সংখ্যা</label>
+                    <input type="number" id="m7_initial_stock" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="m7_final_stock">আহরণ বা গণনার সময় মোট সংখ্যা</label>
+                    <input type="number" id="m7_final_stock" placeholder="যেমন: ২৪০০">
+                </div>
+                <button class="calc-btn" onclick="calculateModule7()">হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m7_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                <div class="info-box">
+                    <strong>দ্রষ্টব্য:</strong> মডিউল ২ থেকে পোনা ছাড়ার সংখ্যা স্বয়ংক্রিয়ভাবে লোড হয়েছে।
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- মডিউল ৮: উৎপাদন খরচ -->
+    <div id="mod8" class="tab-content">
+        <h2>অষ্টম অধ্যায়: মোট উৎপাদন খরচ ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m8_fry_cost">পোনার মূল্য (টাকা)</label>
+                    <input type="number" id="m8_fry_cost" placeholder="মোট খরচ">
+                </div>
+                 <div class="form-group">
+                    <label for="m8_feed_cost">খাদ্যের মোট খরচ (টাকা)</label>
+                    <input type="number" id="m8_feed_cost" placeholder="মোট খরচ">
+                </div>
+                 <div class="form-group">
+                    <label for="m8_pond_prep_cost">পুকুর প্রস্তুতি ও লিজ খরচ (টাকা)</label>
+                    <input type="number" id="m8_pond_prep_cost" placeholder="মোট খরচ">
+                </div>
+                 <div class="form-group">
+                    <label for="m8_labor_cost">শ্রমিক ও অন্যান্য খরচ (টাকা)</label>
+                    <input type="number" id="m8_labor_cost" placeholder="মোট খরচ">
+                </div>
+                 <div class="form-group">
+                    <label for="m8_med_cost">ঔষধ ও রাসায়নিক খরচ (টাকা)</label>
+                    <input type="number" id="m8_med_cost" placeholder="মোট খরচ">
+                </div>
+                <button class="calc-btn" onclick="calculateModule8()">মোট খরচ হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m8_result" class="result-box">
+                   <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- মডিউল ৯: লাভ-ক্ষতি -->
+    <div id="mod9" class="tab-content">
+        <h2>নবম অধ্যায়: লাভ-ক্ষতি এবং BCR ক্যালকুলেটর</h2>
+        <div class="calculator">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="m9_total_cost">মোট উৎপাদন খরচ (টাকা)</label>
+                    <input type="number" id="m9_total_cost" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="m9_total_sale">মোট মাছ বিক্রির পরিমাণ (টাকা)</label>
+                    <input type="number" id="m9_total_sale" placeholder="যেমন: ৫০০০০০">
+                </div>
+                <button class="calc-btn" onclick="calculateModule9()">লাভ-ক্ষতি হিসাব করুন</button>
+            </div>
+            <div class="result-section">
+                <h3>ফলাফল</h3>
+                <div id="m9_result" class="result-box">
+                    <p>ফলাফল এখানে দেখানো হবে।</p>
+                </div>
+                 <div class="info-box">
+                    <strong>দ্রষ্টব্য:</strong> মডিউল ৮ থেকে মোট উৎপাদন খরচ স্বয়ংক্রিয়ভাবে লোড হয়েছে।
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Global object to store farm data and pass between modules
+    const farmData = {
+        areaDecimal: null,
+        waterVolumeLiter: null,
+        waterVolumeM3: null,
+        initialStock: null,
+        totalBiomassKg: null,
+        avgWeightG: null
+    };
+
+    // Tab switching logic
+    function openTab(evt, tabName) {
+        let i, tabcontent, tabbuttons;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tabbuttons = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tabbuttons.length; i++) {
+            tabbuttons[i].className = tabbuttons[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+        
+        // Auto-populate data when a tab is opened
+        updateInputs();
+    }
+
+    // Function to auto-populate inputs from the global farmData object
+    function updateInputs() {
+        if (farmData.areaDecimal) {
+            document.getElementById('m2_pond_area_decimal').value = farmData.areaDecimal.toFixed(2);
+            document.getElementById('m5_pond_area_decimal').value = farmData.areaDecimal.toFixed(2);
+        }
+        if(farmData.waterVolumeLiter){
+            document.getElementById('m5_water_volume_liter').value = farmData.waterVolumeLiter.toFixed(2);
+        }
+        if (farmData.initialStock) {
+            document.getElementById('m3_total_fish').value = farmData.initialStock;
+            document.getElementById('m7_initial_stock').value = farmData.initialStock;
+        }
+        if(farmData.totalBiomassKg){
+             document.getElementById('m4_biomass').value = farmData.totalBiomassKg.toFixed(2);
+        }
+        if(farmData.avgWeightG){
+             document.getElementById('m4_avg_weight').value = farmData.avgWeightG;
+        }
+    }
+
+    // --- Module 1: Area and Volume Calculation ---
+    function calculateModule1() {
+        const unit = document.getElementById('m1_unit').value;
+        const areaInput = parseFloat(document.getElementById('m1_area_input').value);
+        const avgDepthFt = parseFloat(document.getElementById('m1_avg_depth').value);
+        
+        if (isNaN(areaInput) || isNaN(avgDepthFt) || areaInput <= 0 || avgDepthFt <= 0) {
+            alert("অনুগ্রহ করে সঠিক সংখ্যা ইনপুট দিন।");
+            return;
+        }
+
+        // Conversion factors to Decimal
+        const conversionFactors = {
+            decimal: 1,
+            katha: 1.65,
+            bigha: 33,
+            acre: 100
+        };
+
+        const areaInDecimal = areaInput * conversionFactors[unit];
+        const areaInSqFt = areaInDecimal * 435.6;
+        const areaInSqM = areaInDecimal * 40.47;
+        
+        const avgDepthM = avgDepthFt * 0.3048;
+        
+        const volumeInM3 = areaInSqM * avgDepthM;
+        const volumeInLiters = volumeInM3 * 1000;
+
+        // Store data globally
+        farmData.areaDecimal = areaInDecimal;
+        farmData.waterVolumeLiter = volumeInLiters;
+        farmData.waterVolumeM3 = volumeInM3;
+
+        const resultDiv = document.getElementById('m1_result');
+        resultDiv.innerHTML = `
+            <p>জমির পরিমাণ: <span>${areaInDecimal.toFixed(2)} শতাংশ</span></p>
+            <p>ক্ষেত্রফল (বর্গফুট): <span>${areaInSqFt.toFixed(2)} sq. ft.</span></p>
+            <p>ক্ষেত্রফল (বর্গমিটার): <span>${areaInSqM.toFixed(2)} sq. m.</span></p>
+            <p>পানির আয়তন (ঘনমিটার): <span>${volumeInM3.toFixed(2)} m³</span></p>
+            <p>পানির আয়তন (লিটার): <span>${volumeInLiters.toFixed(2)} L</span></p>
+        `;
+    }
+    
+    // --- Module 2: Stocking Density Calculation ---
+    document.getElementById('m2_culture_system').addEventListener('change', function() {
+        const cageGroup = document.getElementById('m2_cage_volume_group');
+        if (this.value === 'pangas_cage') {
+            cageGroup.style.display = 'block';
+             document.getElementById('m2_pond_area_decimal').readOnly = true;
+
+        } else {
+            cageGroup.style.display = 'none';
+            document.getElementById('m2_pond_area_decimal').readOnly = false;
+        }
+    });
+
+    function calculateModule2() {
+        const system = document.getElementById('m2_culture_system').value;
+        const areaDecimal = parseFloat(document.getElementById('m2_pond_area_decimal').value);
+        const cageVolumeM3 = parseFloat(document.getElementById('m2_cage_volume_m3').value);
+
+        const densityData = {
+            semi_intensive_carp: { density: 80, ratio: { 'রুই (২৫%)': 0.25, 'কাতলা (৩৭.5%)': 0.375, 'মৃগেল (২৫%)': 0.25, 'সিলভার কার্প (১২.5%)': 0.125 } },
+            extensive_carp: { density: 20, ratio: { 'রুই (৩৩%)': 0.33, 'কাতলা (৩৩%)': 0.33, 'মৃগেল (৩৪%)': 0.34 } },
+            tilapia_semi: { density: 225, ratio: { 'মনোসেক্স তেলাপিয়া': 1 } },
+            pangas_cage: { density: 30, ratio: { 'পাঙ্গাস': 1 } } // Per m³
+        };
+
+        if (system === 'pangas_cage') {
+            if (isNaN(cageVolumeM3) || cageVolumeM3 <= 0) {
+                alert("অনুগ্রহ করে খাঁচার সঠিক আয়তন ইনপুট দিন।");
+                return;
+            }
+             farmData.initialStock = cageVolumeM3 * densityData[system].density;
+        } else {
+             if (isNaN(areaDecimal) || areaDecimal <= 0) {
+                alert("অনুগ্রহ করে মডিউল ১-এ পুকুরের জায়গা হিসাব করুন অথবা সঠিক মান ইনপুট দিন।");
+                return;
+            }
+            farmData.initialStock = areaDecimal * densityData[system].density;
+        }
+        
+        const selectedSystem = densityData[system];
+        let resultHTML = `<p><strong>মোট পোনা মজুদ করতে হবে: <span>${Math.round(farmData.initialStock)} টি</span></strong></p><hr>`;
+        
+        if (Object.keys(selectedSystem.ratio).length > 1) {
+            resultHTML += `<h4>প্রজাতি ভিত্তিক পরিমাণ:</h4>`;
+            for (const species in selectedSystem.ratio) {
+                const speciesCount = Math.round(farmData.initialStock * selectedSystem.ratio[species]);
+                resultHTML += `<p>${species}: <span>${speciesCount} টি</span></p>`;
+            }
+        }
+        
+        document.getElementById('m2_result').innerHTML = resultHTML;
+    }
+    
+    // --- Module 3: Biomass Calculation ---
+    function calculateModule3() {
+        const totalFish = parseInt(document.getElementById('m3_total_fish').value);
+        const avgWeight = parseFloat(document.getElementById('m3_avg_weight').value);
+
+        if (isNaN(totalFish) || isNaN(avgWeight) || totalFish <= 0 || avgWeight <= 0) {
+            alert("অনুগ্রহ করে সঠিক মাছের সংখ্যা ও গড় ওজন ইনপুট দিন।");
+            return;
+        }
+
+        const totalBiomass = (totalFish * avgWeight) / 1000; // Result in kg
+        farmData.totalBiomassKg = totalBiomass;
+        farmData.avgWeightG = avgWeight;
+
+        document.getElementById('m3_result').innerHTML = `<p>মাছের মোট বায়োমাস: <span>${totalBiomass.toFixed(2)} কেজি</span></p>`;
+    }
+    
+    // --- Module 4: Feed Calculation ---
+    function calculateModule4() {
+        const species = document.getElementById('m4_species').value;
+        const biomass = parseFloat(document.getElementById('m4_biomass').value);
+        const avgWeight = parseFloat(document.getElementById('m4_avg_weight').value);
+        
+        if (isNaN(biomass) || isNaN(avgWeight) || biomass <= 0 || avgWeight <= 0) {
+            alert("অনুগ্রহ করে মডিউল ৩ থেকে বায়োমাস হিসাব করুন।");
+            return;
+        }
+
+        const feedRates = {
+            pangas: [[4, 10], [11, 7], [46, 5], [74, 3], [169, 2], [Infinity, 1.5]],
+            tilapia: [[1, 20], [35, 5], [120, 3], [250, 2], [Infinity, 1.5]], // simplified from weeks to approx grams
+            carp: [[5, 10], [25, 8], [100, 5], [500, 3], [Infinity, 2]]
+        };
+        
+        let feedingRatePercent = 0;
+        const rates = feedRates[species];
+        for(let i=0; i<rates.length; i++){
+            if(avgWeight <= rates[i][0]){
+                feedingRatePercent = rates[i][1];
+                break;
+            }
+        }
+
+        const dailyFeed = biomass * (feedingRatePercent / 100);
+        
+        document.getElementById('m4_result').innerHTML = `
+            <p>প্রযোজ্য ফিডিং হার: <span>${feedingRatePercent}%</span> (শরীরের ওজনের)</p>
+            <p>দৈনিক প্রয়োজনীয় খাদ্য: <span>${dailyFeed.toFixed(3)} কেজি</span></p>
+            <p>সকালের খাবার: <span>${(dailyFeed / 2).toFixed(3)} কেজি</span></p>
+            <p>বিকালের খাবার: <span>${(dailyFeed / 2).toFixed(3)} কেজি</span></p>
+        `;
+    }
+
+    // --- Module 5: Chemical Calculation ---
+    function calculateModule5() {
+        const chemical = document.getElementById('m5_chemical').value;
+        const areaDecimal = farmData.areaDecimal;
+        const volumeLiter = farmData.waterVolumeLiter;
+
+        if (!areaDecimal || !volumeLiter) {
+            alert("অনুগ্রহ করে মডিউল ১ থেকে পুকুরের তথ্য হিসাব করুন।");
+            return;
+        }
+        
+        let amount = 0;
+        let unit = '';
+        let note = '';
+
+        switch(chemical) {
+            case 'lime':
+                amount = areaDecimal * 1; // 1 kg per decimal
+                unit = 'কেজি';
+                note = 'পুকুর প্রস্তুতির জন্য শতাংশ প্রতি ১ কেজি হারে।';
+                break;
+            case 'salt':
+                amount = areaDecimal * 1; // 1 kg per decimal for general use
+                unit = 'কেজি';
+                note = 'সাধারণ প্রতিরোধমূলক ব্যবস্থা হিসাবে শতাংশ প্রতি ১ কেজি হারে।';
+                break;
+            case 'kmno4':
+                amount = volumeLiter * 2 / 1000; // 2 mg/L = 2 g/1000L
+                unit = 'গ্রাম';
+                note = '২ পিপিএম (mg/L) হারে সম্পূর্ণ পুকুরের জন্য।';
+                break;
+            case 'zeolite':
+                const areaAcre = areaDecimal / 100;
+                amount = areaAcre * 15; // 10-20 kg per acre, using 15 as average
+                unit = 'কেজি';
+                note = 'গ্যাসের সমস্যা কমাতে একর প্রতি ১৫ কেজি হারে।';
+                break;
+        }
+
+        document.getElementById('m5_result').innerHTML = `
+            <p>প্রয়োজনীয় পরিমাণ: <span>${amount.toFixed(2)} ${unit}</span></p>
+            <p><em>${note}</em></p>
+        `;
+    }
+
+    // --- Module 6: FCR Calculation ---
+    function calculateModule6() {
+        const totalFeed = parseFloat(document.getElementById('m6_total_feed').value);
+        const weightGain = parseFloat(document.getElementById('m6_total_weight_gain').value);
+
+        if (isNaN(totalFeed) || isNaN(weightGain) || totalFeed <= 0 || weightGain <= 0) {
+            alert("অনুগ্রহ করে সঠিক সংখ্যা ইনপুট দিন।");
+            return;
+        }
+
+        const fcr = totalFeed / weightGain;
+        document.getElementById('m6_result').innerHTML = `<p>খাদ্য রূপান্তর হার (FCR): <span>${fcr.toFixed(2)}</span></p>`;
+    }
+    
+    // --- Module 7: Mortality Calculation ---
+    function calculateModule7() {
+        const initialStock = parseInt(document.getElementById('m7_initial_stock').value);
+        const finalStock = parseInt(document.getElementById('m7_final_stock').value);
+
+        if (isNaN(initialStock) || isNaN(finalStock) || initialStock <= 0 || finalStock < 0) {
+            alert("অনুগ্রহ করে সঠিক সংখ্যা ইনপুট দিন।");
+            return;
+        }
+        if(finalStock > initialStock){
+            alert("শেষের মাছের সংখ্যা শুরুর সংখ্যার চেয়ে বেশি হতে পারে না।");
+            return;
+        }
+
+        const mortalityCount = initialStock - finalStock;
+        const mortalityRate = (mortalityCount / initialStock) * 100;
+        const survivalRate = 100 - mortalityRate;
+
+        // Update the current fish count in farmData for future biomass calculations
+        farmData.initialStock = finalStock; 
+        updateInputs(); // Refresh inputs on other tabs
+
+        document.getElementById('m7_result').innerHTML = `
+            <p>মোট মৃত মাছ: <span>${mortalityCount} টি</span></p>
+            <p>মৃত্যুহার: <span>${mortalityRate.toFixed(2)}%</span></p>
+            <p>বেঁচে থাকার হার: <span>${survivalRate.toFixed(2)}%</span></p>
+        `;
+    }
+    
+    // --- Module 8: Cost Calculation ---
+    function calculateModule8() {
+        const costs = {
+            fry: parseFloat(document.getElementById('m8_fry_cost').value) || 0,
+            feed: parseFloat(document.getElementById('m8_feed_cost').value) || 0,
+            pond: parseFloat(document.getElementById('m8_pond_prep_cost').value) || 0,
+            labor: parseFloat(document.getElementById('m8_labor_cost').value) || 0,
+            med: parseFloat(document.getElementById('m8_med_cost').value) || 0,
+        };
+        
+        const totalCost = costs.fry + costs.feed + costs.pond + costs.labor + costs.med;
+        
+        // Store for Module 9
+        document.getElementById('m9_total_cost').value = totalCost;
+
+        document.getElementById('m8_result').innerHTML = `<p>মোট উৎপাদন খরচ: <span>${totalCost.toFixed(2)} টাকা</span></p>`;
+    }
+    
+    // --- Module 9: Profit/Loss Calculation ---
+    function calculateModule9() {
+        const totalCost = parseFloat(document.getElementById('m9_total_cost').value);
+        const totalSale = parseFloat(document.getElementById('m9_total_sale').value);
+
+        if (isNaN(totalCost) || isNaN(totalSale) || totalCost < 0 || totalSale < 0) {
+            alert("অনুগ্রহ করে সঠিক খরচের এবং বিক্রির পরিমাণ ইনপুট দিন।");
+            return;
+        }
+        
+        const netProfit = totalSale - totalCost;
+        const bcr = totalSale / totalCost;
+
+        let resultHTML = `<p>লাভ/ক্ষতি: <span style="color: ${netProfit >= 0 ? 'var(--success-color)' : 'var(--error-color)'}">${netProfit.toFixed(2)} টাকা</span></p>`;
+        
+        if (totalCost > 0) {
+             resultHTML += `<p>লাভ-খরচ অনুপাত (BCR): <span>${bcr.toFixed(2)}</span></p>`;
+             if(bcr > 1){
+                 resultHTML += `<p><em>এর অর্থ হল, প্রতি ১ টাকা খরচের বিপরীতে আপনি ${bcr.toFixed(2)} টাকা আয় করেছেন।</em></p>`;
+             } else {
+                 resultHTML += `<p><em>এর অর্থ হল, প্রতি ১ টাকা খরচের বিপরীতে আপনি ${bcr.toFixed(2)} টাকা আয় করেছেন, যা একটি লোকসানি প্রকল্প।</em></p>`;
+             }
+        }
+
+        document.getElementById('m9_result').innerHTML = resultHTML;
+    }
+</script>
+
+</body>
+</html>
