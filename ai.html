@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মৎস্য পরামর্শ সেবা - Fish Farming Consultation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --secondary: #10b981;
+            --accent: #06b6d4;
+            --bg-main: #f0f9ff;
+            --bg-card: #ffffff;
+            --text-primary: #0c4a6e;
+            --text-secondary: #164e63;
+            --border: #bae6fd;
+            --shadow: rgba(8, 145, 178, 0.1);
+            --gradient-start: #0ea5e9;
+            --gradient-end: #06b6d4;
+        }
+
+        .dark {
+            --primary: #22d3ee;
+            --primary-dark: #06b6d4;
+            --secondary: #34d399;
+            --accent: #67e8f9;
+            --bg-main: #0c1821;
+            --bg-card: #164e63;
+            --text-primary: #e0f2fe;
+            --text-secondary: #bae6fd;
+            --border: #155e75;
+            --shadow: rgba(6, 182, 212, 0.2);
+            --gradient-start: #0e7490;
+            --gradient-end: #164e63;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-box: border-box;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            padding: 2.5rem 0;
+            box-shadow: 0 4px 20px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Tiro Bangla', serif;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        main {
+            padding: 3rem 0;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--shadow);
+        }
+
+        .section-title {
+            font-family: 'Tiro Bangla', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 2rem;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            background: linear-gradient(to right, var(--bg-main), var(--bg-card));
+            padding: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: background 0.3s ease;
+            font-size: 1.05rem;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-main);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: var(--bg-card);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 1.25rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Chatbot Section */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: var(--bg-main);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.bot .message-content.error {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+
+        .dark .message.bot .message-content.error {
+            background: #7f1d1d;
+            border-color: #dc2626;
+            color: #fecaca;
+        }
+
+        .message.bot .message-content.loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .send-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(8, 145, 178, 0.4);
+        }
+
+        .send-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .welcome-message h3 {
+            font-family: 'Tiro Bangla', serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 8px var(--shadow));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .send-button {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* Markdown Styling */
+        .message-content ul,
+        .message-content ol {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .message-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        .message-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content strong {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .message-content code {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .dark .message-content code {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--bg-card);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>🐟 মৎস্য পরামর্শ সেবা</h1>
+                <p class="subtitle">আধুনিক মাছ চাষের সকল সমাধান এক জায়গায়</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- FAQ Section -->
+        <section class="section">
+            <h2 class="section-title">সাধারণ সমস্যা ও সমাধান</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>পুকুরের পানি সবুজ হয়ে যাচ্ছে, কী করব?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>কারণ:</strong> পানিতে শৈবাল বৃদ্ধি পাওয়ার ফলে এমন হয়। অতিরিক্ত খাদ্য প্রয়োগ ও জৈব পদার্থের কারণে এটি হতে পারে।</p>
+                        <p><strong>সমাধান:</strong></p>
+                        <ul>
+                            <li>পুকুরে চুন প্রয়োগ করুন (প্রতি শতাংশে ১ কেজি)</li>
+                            <li>নিয়মিত পানি পরিবর্তন করুন (সপ্তাহে ১৫-২০%)</li>
+                            <li>খাদ্য প্রয়োগের পরিমাণ কমিয়ে দিন</li>
+                            <li>জিওলাইট বা অ্যালামিনিয়াম সালফেট ব্যবহার করতে পারেন</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>মাছ পানির উপরে ভেসে উঠছে, কারণ কী?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>কারণ:</strong> পানিতে অক্সিজেনের ঘাটতি হলে মাছ এভাবে আচরণ করে।</p>
+                        <p><strong>সমাধান:</strong></p>
+                        <ul>
+                            <li>অবিলম্বে পানিতে অক্সিজেন সরবরাহ বাড়ান (অ্যারেটর ব্যবহার করুন)</li>
+                            <li>তাজা পানি যোগ করুন</li>
+                            <li>খাবার দেওয়া সাময়িক বন্ধ রাখুন</li>
+                            <li>রাতে বা ভোরে এই সমস্যা বেশি হলে সারারাত অ্যারেটর চালু রাখুন</li>
+                            <li>পুকুরের তলদেশের গ্যাস দূর করতে নিয়মিত জাল টানুন</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>মাছের খাবার কত সময় পর পর দিতে হবে?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>উত্তর:</strong> মাছের বয়স এবং প্রজাতি অনুযায়ী খাবারের পরিমাণ ও সময় ভিন্ন হয়।</p>
+                        <p><strong>সাধারণ নিয়ম:</strong></p>
+                        <ul>
+                            <li>পোনা মাছ (১-৩ মাস): দিনে ৩-৪ বার, শরীরের ওজনের ৮-১০%</li>
+                            <li>বাড়ন্ত মাছ (৩-৬ মাস): দিনে ২-৩ বার, শরীরের ওজনের ৫-৬%</li>
+                            <li>পূর্ণবয়স্ক মাছ: দিনে ২ বার, শরীরের ওজনের ৩-৪%</li>
+                            <li>সকাল ৮-৯টা এবং বিকেল ৪-৫টা খাবার দেওয়ার উপযুক্ত সময়</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>পুকুরে কোন মাছ একসাথে চাষ করা ভালো?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>মিশ্র চাষ পদ্ধতি:</strong> পুকুরের বিভিন্ন স্তর কাজে লাগাতে মিশ্র চাষ লাভজনক।</p>
+                        <p><strong>উপযুক্ত মাছের সমন্বয় (প্রতি শতাংশে):</strong></p>
+                        <ul>
+                            <li>রুই: ৩০-৪০টি (উপরের স্তর)</li>
+                            <li>কাতলা: ২০-২৫টি (উপরের স্তর)</li>
+                            <li>সিলভার কার্প: ৩০-৩৫টি (মধ্য স্তর)</li>
+                            <li>মৃগেল: ২৫-৩০টি (তলদেশ)</li>
+                            <li>কমন কার্প: ১৫-২০টি (তলদেশ)</li>
+                            <li>গ্রাস কার্প: ৫-১০টি (আগাছা নিয়ন্ত্রণ)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>মাছের রোগ প্রতিরোধে কী করণীয়?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>প্রতিরোধমূলক ব্যবস্থা:</strong></p>
+                        <ul>
+                            <li>পুকুরে পোনা ছাড়ার আগে ভালোভাবে প্রস্তুতি নিন (শুকানো, চুন প্রয়োগ, সার প্রয়োগ)</li>
+                            <li>সুস্থ ও মানসম্পন্ন পোনা সংগ্রহ করুন</li>
+                            <li>পোনা ছাড়ার আগে লবণ পানিতে (৩-৫%) ৫-১০ মিনিট গোসল করান</li>
+                            <li>নিয়মিত পানির গুণাগুণ পরীক্ষা করুন (pH, অক্সিজেন, তাপমাত্রা)</li>
+                            <li>মাত্রাতিরিক্ত খাবার দেবেন না, অবশিষ্ট খাবার পচে পানি নষ্ট করে</li>
+                            <li>নিয়মিত চুন ও লবণ প্রয়োগ করুন</li>
+                            <li>মাসে একবার পুকুরে জাল টানুন মাছের স্বাস্থ্য পরীক্ষা করতে</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>পুকুরের পানির pH কত হওয়া উচিত?</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>আদর্শ pH মাত্রা:</strong> মাছ চাষের জন্য পানির pH ৭.০ থেকে ৮.৫ এর মধ্যে হওয়া উচিত।</p>
+                        <p><strong>pH সমন্বয়:</strong></p>
+                        <ul>
+                            <li>pH কম হলে (অম্লীয়): চুন প্রয়োগ করুন (প্রতি শতাংশে ১-২ কেজি)</li>
+                            <li>pH বেশি হলে (ক্ষারীয়): জিপসাম বা গোবর প্রয়োগ করুন</li>
+                            <li>সপ্তাহে অন্তত একবার pH পরীক্ষা করুন</li>
+                            <li>pH হঠাৎ পরিবর্তন মাছের জন্য ক্ষতিকর, ধীরে ধীরে সমন্বয় করুন</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Chatbot Section -->
+        <section class="section">
+            <h2 class="section-title">🤖 AI মৎস্য পরামর্শক</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">🐠</div>
+                        <h3>স্বাগতম!</h3>
+                        <p>আমি আপনার AI মৎস্য পরামর্শক। মাছ চাষ সম্পর্কিত যেকোনো প্রশ্ন করুন, আমি সাহায্য করতে প্রস্তুত।</p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">নোট: আমি শুধুমাত্র মৎস্য ও মাছ চাষ সম্পর্কিত প্রশ্নের উত্তর দিতে পারি।</p>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input
+                        type="text"
+                        class="chat-input"
+                        id="chatInput"
+                        placeholder="আপনার প্রশ্ন লিখুন..."
+                        autocomplete="off"
+                    >
+                    <button class="send-button" id="sendButton">পাঠান</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const wasActive = item.classList.contains('active');
+
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+
+                // Open clicked item if it wasn't active
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Chatbot functionality
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+
+        let isProcessing = false;
+
+        // Register handler for bot responses
+        window.Poe.registerHandler('fish-advisor-handler', (result, context) => {
+            const msg = result.responses[0];
+
+            // Remove loading message
+            const loadingMsg = document.querySelector('.message.bot .loading');
+            if (loadingMsg) {
+                loadingMsg.closest('.message').remove();
+            }
+
+            if (msg.status === 'error') {
+                addBotMessage('দুঃখিত, একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।', true);
+                isProcessing = false;
+                sendButton.disabled = false;
+            } else if (msg.status === 'incomplete') {
+                // Update or create streaming message
+                let streamingMsg = document.getElementById('streaming-message');
+                if (!streamingMsg) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message bot';
+                    messageDiv.innerHTML = `
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content" id="streaming-message"></div>
+                    `;
+                    chatMessages.appendChild(messageDiv);
+                    streamingMsg = document.getElementById('streaming-message');
+                }
+                // Render markdown content
+                streamingMsg.innerHTML = marked.parse(msg.content || '');
+                scrollToBottom();
+            } else if (msg.status === 'complete') {
+                // Update final message
+                let streamingMsg = document.getElementById('streaming-message');
+                if (streamingMsg) {
+                    streamingMsg.innerHTML = marked.parse(msg.content);
+                    streamingMsg.removeAttribute('id');
+                } else {
+                    addBotMessage(msg.content);
+                }
+                isProcessing = false;
+                sendButton.disabled = false;
+                scrollToBottom();
+            }
+        });
+
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">👤</div>
+                <div class="message-content">${escapeHtml(text)}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addBotMessage(text, isError = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            const contentClass = isError ? 'message-content error' : 'message-content';
+            const content = isError ? escapeHtml(text) : marked.parse(text);
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="${contentClass}">${content}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addLoadingMessage() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content loading">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>চিন্তা করছি...</span>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message || isProcessing) return;
+
+            // Clear input
+            chatInput.value = '';
+            isProcessing = true;
+            sendButton.disabled = true;
+
+            // Remove welcome message if exists
+            const welcomeMsg = document.querySelector('.welcome-message');
+            if (welcomeMsg) {
+                welcomeMsg.remove();
+            }
+
+            // Add user message
+            addUserMessage(message);
+
+            // Add loading indicator
+            addLoadingMessage();
+
+            // Prepare prompt with domain restriction
+            const systemPrompt = `আপনি একজন বিশেষজ্ঞ মৎস্য পরামর্শক। আপনার কাজ হলো শুধুমাত্র মৎস্য চাষ, মাছের রোগ, পুকুর ব্যবস্থাপনা, মাছের খাদ্য, এবং মাছ চাষ সংক্রান্ত বিষয়ে পরামর্শ প্রদান করা।
+
+গুরুত্বপূর্ণ নির্দেশনা:
+- শুধুমাত্র মৎস্য চাষ এবং মাছ সম্পর্কিত প্রশ্নের উত্তর দিন
+- যদি প্রশ্নটি মৎস্য চাষ সম্পর্কিত না হয়, ভদ্রভাবে জানান যে আপনি শুধুমাত্র মৎস্য সম্পর্কিত বিষয়ে সাহায্য করতে পারেন
+- উত্তর বাংলায় প্রদান করুন
+- উত্তর সংক্ষিপ্ত, স্পষ্ট এবং বাস্তবসম্মত হতে হব���
+- প্রয়োজনে ধাপে ধাপে সমাধান দিন
+
+ব্যবহারকারীর প্রশ্ন: ${message}
+
+অনুগ্রহ করে উপরের প্রশ্নের উত্তর দিন। যদি এটি মৎস্য চাষ সংক্রান্ত না হয়, তাহলে বলুন: "দুঃখিত, আমি শুধুমাত্র মৎস্য চাষ এবং মাছ সম্পর্কিত বিষয়ে আপনাকে সহযোগিতা করতে পারি। অনুগ্রহ করে মাছ চাষ সংক্রান্ত প্রশ্ন করুন।"`;
+
+            try {
+                await window.Poe.sendUserMessage(
+                    `@GPT-5.1 ${systemPrompt} --web_search true`,
+                    {
+                        handler: 'fish-advisor-handler',
+                        stream: true,
+                        openChat: false
+                    }
+                );
+            } catch (err) {
+                // Remove loading message
+                const loadingMsg = document.querySelector('.message.bot .loading');
+                if (loadingMsg) {
+                    loadingMsg.closest('.message').remove();
+                }
+
+                if (err.errorType === 'USER_REJECTED_CONFIRMATION') {
+                    addBotMessage('আপনি অনুরোধটি বাতিল করেছেন।', true);
+                } else {
+                    addBotMessage('দুঃখিত, একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।', true);
+                }
+                isProcessing = false;
+                sendButton.disabled = false;
+            }
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
+
